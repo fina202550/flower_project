@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .orders-container {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .order-card {
+            display: flex;
+            gap: 20px;
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .order-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .order-info {
+            flex: 1;
+        }
+
+        .order-info h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .order-info p {
+            margin: 5px 0;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #2e8b57;
+        }
+
+        .empty {
+            text-align: center;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+{% include "shop/navbar.html" %}
+
+<div class="orders-container">
+    <h2>📦 My Orders</h2>
+
+    {% if orders %}
+        {% for order in orders %}
+            <div class="order-card">
+
+                <!-- Product Image -->
+                {% if order.product.image %}
+                    <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}">
+                {% else %}
+                    <img src="{% static 'shop/images/no-image.png' %}">
+                {% endif %}
+
+                <!-- Order Info -->
+                <div class="order-info">
+                    <h3>{{ order.product.name }}</h3>
+                    <p>Quantity: {{ order.quantity }}</p>
+                    <p class="price">
+                        ¥{{ order.total_price }}
+                    </p>
+                    <p>Ordered on: {{ order.created_at|date:"Y-m-d H:i" }}</p>
+                </div>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty">
+            <p>No orders yet 😢</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
